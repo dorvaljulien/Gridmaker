@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# This takes the name of a directory as an argument and creates it. If it 
+# already exists, it removes it before creating the new one.
+
+if [ -d $1 ]; 
+then
+	rm -fr $1
+fi
+
+mkdir $1

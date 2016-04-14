@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# This script removes all files which have names beginning with the argument.
+# Example: If I want to remove all FGONG.* files in tube1/LOGS, I type:
+# 	./rm_silent tube1/LOGS/FGONG.
+# The asterisk has to be added in the script. This script allows not to get
+# an error message if there are no matching files.
+
+files=$(ls $1* 2> /dev/null | wc -l)
+
+if [ "$files" != "0" ] 
+	then rm $1*
+fi

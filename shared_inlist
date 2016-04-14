@@ -1,0 +1,101 @@
+! inlist_project 
+
+! contains the parameters controlling this job
+
+! for the sake of future readers of this (yourself included),
+! ONLY include the controls you are actually using.
+! DO NOT include all of the other controls that
+! simply have their default values.
+
+
+
+&star_job
+
+      mesa_dir = '' ! empty string defaults to environment variable MESA_DIR
+      
+      create_pre_main_sequence_model = .false.
+
+      change_net = .true. ! switch nuclear reaction network
+      new_net_name = 'o18_and_ne22.net'
+
+      eos_file_prefix = 'mesa'
+      kappa_file_prefix = 'gs98'
+      
+      pgstar_flag = .false.
+
+      change_lnPgas_flag = .true.
+      new_lnPgas_flag = .true.
+
+      change_v_flag = .true.
+      new_v_flag = .true.
+
+
+/ !end of star_job
+
+
+&controls
+
+!We read the part of the inlist written by the IDL process
+      read_extra_controls_inlist1 = .true.
+      extra_controls_inlist1_name = 'inlist_parameters'
+
+   
+!Output control
+   profile_data_suffix=''
+   photo_digits=2
+   history_interval=1
+   profile_interval=1
+   max_num_profile_models=100000
+
+
+   write_controls_info_with_profile=.false.
+
+!delta_HR_limit = 8d-4
+
+   max_age=13.7d9
+
+   stop_at_TP=.true.
+
+! Mixing parameters
+   use_Ledoux_criterion=.true.
+   alpha_semiconvection=1
+   thermo_haline_coeff=100
+
+! Mesh
+   max_allowed_nz=80000
+
+! Brunt
+   calculate_Brunt_N2=.true.
+
+! lg_XH_cntr is log10(h1 mass fraction at center)
+!      delta_lg_XH_cntr_min = -6 ! ignore changes in lg_XH_cntr if value is less than this
+!      delta_lg_XH_cntr_max = 1 ! ignore changes in lg_XH_cntr if value is more than this
+!      delta_lg_XH_cntr_limit = 0.005
+
+which_atm_option='Krishna_Swamy'
+
+
+! mass gain or loss
+   RGB_wind_scheme = 'Reimers'
+   AGB_wind_scheme = 'Blocker'
+   RGB_to_AGB_wind_switch = 1d-4
+   Reimers_wind_eta = 0.5d0  
+   Blocker_wind_eta = 0.05d0  
+
+! Pulse info
+   write_pulse_info_with_profile = .true. ! if true, write pulse info file when write profile 
+   pulse_info_format = 'FGONG' ! e.g., 'FGONG', 'OSC', ...  
+   add_atmosphere_to_pulse_info = .true. 
+
+
+
+
+
+/ ! end of controls namelist
+
+
+
+&pgstar
+
+
+/ ! end of pgstar namelist

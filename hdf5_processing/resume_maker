@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# This script remove the termination string 'END' at the end of tobedeleted
+# and todolist. This is more of a precaution than anything else, as it is only
+# used at the beginning of resume_grid.pro, at a point where there should be no
+# string termination in todolist, and certainly not in tobedeleted as the latter
+# doesn't use this in this version. It doesn't do any harm and is not long, so 
+# I kept it just in case.
+
+# What it does is copying the files line by line to a tmp file, except when it
+# reads 'END' then it renames tmp to the original file.
+
+
+while read line
+do
+	if [ "$line" != "END" ];
+	then
+		echo "$line" >> "tmp"
+	fi
+done < todolist
+
+touch tmp #in case there was nothing but "END", this creates an empty file
+mv tmp todolist
+
+while read line
+do
+	if [ "$line" != "END" ];
+	then
+		echo "$line" >> "tmp"
+	fi
+done < tobedeleted
+
+touch tmp #in case there was nothing but "END", this creates an empty file
+mv tmp tobedeleted
+
+

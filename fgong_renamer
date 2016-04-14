@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# This script will rename all the files with names like profile.FGONG or FGONG.profile
+# into fgong.profile at the path given as an argument.
+#
+# Example: ./fgong_renamer tube1/LOGS/
+#
+# The rename command works like that: rename 'string to replace' 'by this new one' 'in the names of these files'
+# If the first string is empty, the new one will be added at the beginning of the file.
+#
+
+cd $1
+
+files=$(ls *.FGONG 2> /dev/null | wc -l)
+if [ "$files" != "0" ] 
+then
+rename '' fgong. *.FGONG
+rename .FGONG '' fgong.*
+fi
+
+#this part is for my MESA code that I tweaked to place FGONG at the beginning of the file
+files=$(ls FGONG.* 2> /dev/null | wc -l)
+if [ "$files" != "0" ] 
+then
+rename FGONG. fgong.  FGONG.*
+fi

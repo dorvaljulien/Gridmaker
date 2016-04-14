@@ -1,0 +1,86 @@
+#!/bin/bash
+
+# This script is the third running program participating to Gridmaker as a whole.
+#
+# When hdf5_maker finishes writing the information of a star in the HDF5 file, it appends
+# at the end of the 'tobedeleted' file the path to the data from this star in the output
+# directory. output_data_deletion reads this path and removes all the profiles from this
+# star in output. It doesn't remove the fgong files or the history.data file.
+#
+# output_data_deletion also needs the deletion_count file. This file contains a single integer
+# which keep tracks of the number of star the script treated. That way, if everything is interrupted,
+# when the script resume, it reads deletion_count and knows exactly how many lines to pass to reach
+# the new stars.
+#
+# Example: let's imagine Gridmaker was interrupted.
+#
+# tobedeleted contains:
+#	[path]/grid/output/0.0001000/M0.50_L1.80
+#	[path]/grid/output/0.0001000/M0.51_L1.80
+#	[path]/grid/output/0.0001000/M0.52_L1.80
+#
+# deletion_count contains:
+#	2
+#
+# When ./output_data_deletion is launched, it passes
+# the first two lines and deletes the third one:
+#	rm -r [path]/grid/output/0.0001000/M0.52_L1.80/m*
+# It then updates deletion_count to 3. Until a new line is
+# added, it'll keep reading the file over and over.
+#
+# The script normally ends when the new line it reads is the termination string 'END'.
+#
+# Like for hdf5_maker, if a file named STOP appears or if the list file, tobedeleted,
+# is not there anymore, the script breaks out of the loop and stops.
+#
+
+
+# First step: we read the previous deletion_count.
+# It should be 0 for a new grid as it is set by ./reset
+while read line
+do
+	mark=$line
+done <deletion_count
+
+switch=0
+while [ $switch -eq 0 ] # This switch can only be changed when END is found.
+do
+	# Stopping the process if the STOP file exists
+	if [ -f STOP ];
+	then
+		break
+	fi
+
+	# If we can't find tobedeleted, we signal it and shut down the script
+	if [ ! -f tobedeleted ];
+	then
+		echo "tobedeleted not found - Shutting down"
+		break
+	fi
+
+	count=0	# This is the number of the line we are currently reading.  	
+	# It is useful in comparison of the mark variable, which sets the 
+	# line number of the next line that should be read, which is the number
+	# of stars already treated by output_data_deletion. As long as nothing
+	# new is added to tobedeleted, count never reaches mark.
+	while read line           
+	do 
+	
+		if [ $count -eq $mark ]; # A new line has been added
+		then
+			if [ $line == END ];	# If this new line is the termination symbol
+			then
+				switch=1	# Flip the global switch, this is the last iteration of the main loop
+				((mark++))
+			else	# the line actually contains a path to 'clean'		
+				rm -r $line/m*	 		# We remove the profiles for this star
+				((mark++))			# We update the mark	
+				echo $mark > deletion_count	# We update deletion_count
+			fi
+		fi    
+
+	((count++))      
+
+	done < tobedeleted  
+
+done

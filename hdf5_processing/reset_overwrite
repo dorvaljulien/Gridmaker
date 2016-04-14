@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# This script cleans the processing directory from any trace of a
+# a previous run. This basically return hdf5_processing/ to its
+# default state.
+#
+#  /!\ /!\ WARNING /!\ /!\ 
+# ./reset removes all the .h5 files. You should back up your important
+# HDF5 files before using reset (and gridmaker.pro as it launches reset)  
+
+
+# We make sure ./output_data_deletion and ./hdf5_maker stop
+touch STOP
+sleep 1		# We wait a bit to be sure they see the file
+rm -f STOP
+
+# We reset the lists: touch create an empty file
+rm todolist; touch todolist
+rm tobedeleted; touch tobedeleted
+
+# We set the counts to 0
+echo 0 > star_count
+echo 0 > deletion_count
+
+
+# We also reset the logfile
+rm -f logfile_hdf5; touch logfile_hdf5
+
+# Check the existence of any .h5 file and removes them
+files=$(ls *.h5 2> /dev/null | wc -l)
+if [ "$files" != "0" ] 
+	then rm *.h5
+fi
+
+

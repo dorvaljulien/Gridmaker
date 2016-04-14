@@ -1,0 +1,5 @@
+To start using gridmaker, you should first go into tube1 and launch ./mk. This will build the star
+file from your MESA configuration. Then, if hdf5_maker is not already built in the hdf5_processing 
+directory, you should just launch 'make' within grid/hdf5_processing/
+
+You should be now ready to go, but you probably should read the quickstart section of the user manual first.

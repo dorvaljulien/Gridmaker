@@ -1,0 +1,9 @@
+&controls
+
+zams_filename='/import/extend2/dorval/MESA/MESA_4522/zams/zams_z0.0010000_dM0.01_M0.5-5.0.data'
+initial_Z =0.0010000
+initial_mass =0.51 ! in Msun units
+mixing_length_alpha =1.80
+profile_data_prefix='m0051.z0.0010000.a180.o000.'
+
+/

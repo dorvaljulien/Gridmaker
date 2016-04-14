@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# This script cleans the grid directory by erasing any traces of a previous run:
+#
+#	- All the content of the output directory
+#	- All the content of the LOGS directories in each tube
+#	- All the content of the photos directories in each tube
+#	- All the free flags in each tube, as well as logstorage and the .out files
+#	- All the progress files
+#	- The execution times files
+#	- The journal (which keep tracks of the date and elapsed time)
+#
+# The first step can take a very long time if for some reason, the hdf5 processing
+# and the deletion failed. Output can then be containing all the data of the grid, and 
+# the deletion can take hours, or even fail because there are too many files. 
+# If that happens, one should delete manually star directories in output.
+# Hopefully, to check the log_hdf5 once in a while should be enough to ensure processing and
+# deletion are performing as expected. The cleaning of the LOGS/ can also take some time
+# if there are a lot of tubes with "large" stars (a lot of models).
+#
+# The weird bash command before the rm commands are just here to ensure rm doesn't return
+# an error message if it doesn't find any matching files. Checking the existence of several files
+# at once was more complicated than expected. I couldn't find a simpler way to do that.
+
+
+
+files=$(ls output/* 2> /dev/null | wc -l)
+if [ "$files" != "0" ] 
+then
+	echo "Cleaning the output directory, might take a while..."
+	rm -r output/*
+fi
+
+files=$(ls tube*/LOGS/* 2> /dev/null | wc -l)
+if [ "$files" != "0" ] 
+then
+	echo "Cleaning the LOGS directories..."
+	rm tube*/LOGS/*
+fi
+
+files=$(ls tube*/photos/* 2> /dev/null | wc -l)
+if [ "$files" != "0" ] 
+then
+	echo "Cleaning the photos directories..."
+	rm tube*/photos/*
+fi
+
+files=$(ls tube*/free 2> /dev/null | wc -l)
+if [ "$files" != "0" ] 
+then rm tube*/free
+fi
+
+files=$(ls tube*/logstorage 2> /dev/null | wc -l)
+if [ "$files" != "0" ] 
+then rm tube*/logstorage
+fi
+
+files=$(ls tube*/star_job_namelist.out 2> /dev/null | wc -l)
+if [ "$files" != "0" ] 
+then rm tube*/star_job_namelist.out
+
+fi
+
+files=$(ls progress/* 2> /dev/null | wc -l)
+if [ "$files" != "0" ] 
+then rm progress/*
+fi
+
+files=$(ls execution_times/* 2> /dev/null | wc -l)
+if [ "$files" != "0" ] 
+then rm execution_times/*
+fi
+
+rm -f journal
+
+
+echo "Cleaning completed."

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# This takes tube1 and copy it to create all the necessary tubes
+# to reach the number specified as an argument. It only
+# creates non-existing tubes. If there are already 8 tubes,
+# ./tube_copier 5 won't do anything.
+
+for (( i=2; i<=$1; i++ ))
+do
+	if [ ! -d tube$i ]; # The ! reverse the boolean value of the existence test: " if [tube$i DOESNT exist] "
+	then
+		echo creating tube$i
+		cp -r tube1 tube$i
+	fi
+done

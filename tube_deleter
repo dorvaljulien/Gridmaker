@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# This simply remove all the tubes except tube1.
+
+for (( i=2; i<=40; i++ ))
+do
+rm -fr tube$i # the f option allows to avoid an error message for non existing tubes
+done

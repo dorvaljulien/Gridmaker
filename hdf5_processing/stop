@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#This stop ./output_data_deletion and ./hdf5_maker
+
+touch STOP
+sleep 1		# We wait a bit to be sure they see the file
+rm -f STOP

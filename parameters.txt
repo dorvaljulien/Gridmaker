@@ -1,0 +1,12 @@
+metal.list		# metallicity list 
+mass.list		# mass list 
+mixing.list		# mixing.list
+
+3			# Number of tubes
+4			# Cores per tube
+
+/import/extend2/dorval/grid1.6			# global path (no path here should end with a '/')
+/import/extend2/dorval/grid1.6/output		# output path
+/import/extend2/dorval/MESA/MESA_4522/zams 	# zams files path
+
+test.h5			# HDF5 filename

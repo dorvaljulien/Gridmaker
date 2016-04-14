@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# This script simply copy the shared inlist in each of the existing tubes.
+# It takes the number of tubes as an argument.
+
+echo "Copying the shared part of the inlist..."
+for (( i=1; i<=$1; i++ )) 
+	do
+	cp shared_inlist tube$i/inlist
+done

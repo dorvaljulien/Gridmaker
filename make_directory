@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# This directory checks the existence of a directory and creates it
+# if it doesn't exist. It takes the name of the directory as an argument.
+# This is useful for not getting an error message with mkdir if the directory
+# exists.
+
+if [ ! -d $1 ]; 
+then
+	mkdir $1
+fi
